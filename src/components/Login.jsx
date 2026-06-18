@@ -6,6 +6,30 @@ const Login = ({ onSwitchToSignup }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+
+  const token=""
+ try{
+  const response= await fetch("http://localhost:5000/api/auth/login",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      email,
+      password
+    })
+  });
+  token = response.token;
+  if(token){
+
+    console.log("token : ", token);
+  }
+ }
+ catch(error){
+  console.error(error);
+ }
+  
+
   return (
     <div className="min-h-screen w-full bg-[#f8fafc] flex items-center justify-center p-4 relative overflow-hidden font-sans">
       <div className="absolute top-[-10%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full bg-violet-500/10 blur-[80px] sm:blur-[120px] pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />

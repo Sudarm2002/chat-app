@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 const Signup = () => {
+  
 
+  const [errors,seterrors]=useState({})
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -16,19 +18,39 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (event) => {
-    
+
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+      seterrors((prev)=>({
+        ...prev,
+      [name]: false
+    }))
+
   };
 
 const signuserdata = async () => {
+    let newerrors={}
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if(!formData.name.trim()) newerrors.name=true
+  if(!formData.username.trim()) newerrors.username=true
+  if(!formData.email.trim() || !emailRegex.test(formData.email)) newerrors.email=true
+  if(!formData.password.trim()) newerrors.password=true
+  if(!formData.confirmPassword.trim()) newerrors.confirmPassword=true
+  
+  if(Object.keys(newerrors).length > 0){
+    seterrors(newerrors)
+    return;
+  }
+  
   if(formData.password !== formData.confirmPassword){
     alert("Passwords do not match");
     return
   }
+
   try{
     const response = await fetch('http://localhost:5000/api/auth/signup', {
       method: 'POST',
@@ -107,7 +129,7 @@ const signuserdata = async () => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Your full name"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                  className={`w-full rounded-2xl border ${errors.name? 'border-red-500 bg-red-100' : 'border-slate-200 bg-slate-50'} px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10`}
                 />
               </div>
 
@@ -122,7 +144,7 @@ const signuserdata = async () => {
                   value={formData.username}
                   onChange={handleChange}
                   placeholder="Choose a username"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                  className={`w-full rounded-2xl border ${errors.username? 'border-red-500 bg-red-100' : 'border-slate-200 bg-slate-50'} px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10`}
                 />
               </div>
 
@@ -137,7 +159,7 @@ const signuserdata = async () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="name@example.com"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                  className={`w-full rounded-2xl border ${errors.email? 'border-red-500 bg-red-100' : 'border-slate-200 bg-slate-50'} px-4 py-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10`}
                 />
               </div>
 
@@ -153,7 +175,7 @@ const signuserdata = async () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Create a secure password"
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                    className={`w-full rounded-2xl border ${errors.password? 'border-red-500 bg-red-100' : 'border-slate-200 bg-slate-50'} px-4 py-3 pr-12 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10`}
                   />
                   <button
                     type="button"
@@ -187,7 +209,7 @@ const signuserdata = async () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Re-enter your password"
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                    className={`w-full rounded-2xl border ${errors.confirmPassword? 'border-red-500 bg-red-100' : 'border-slate-200 bg-slate-50'} px-4 py-3 pr-12 text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10`}
                   />
                   <button
                     type="button"

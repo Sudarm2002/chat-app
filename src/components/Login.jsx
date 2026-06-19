@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
-const Login = ({ onSwitchToSignup }) => {
+const Login = async ({ onSwitchToSignup }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
 
-  const token=""
  try{
   const response= await fetch("http://localhost:5000/api/auth/login",{
     method:"POST",
@@ -20,6 +19,7 @@ const Login = ({ onSwitchToSignup }) => {
     })
   });
   token = response.token;
+
   if(token){
 
     console.log("token : ", token);

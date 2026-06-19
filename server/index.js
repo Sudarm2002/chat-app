@@ -8,6 +8,7 @@ import pool from './db.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import middleware from './middleware/verifytoken.js'
 
 const app = express();
 const PORT = 5000;

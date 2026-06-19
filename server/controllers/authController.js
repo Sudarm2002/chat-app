@@ -72,16 +72,32 @@ export const login = async (req,res)=>{
         message:"Invalid email or password"
       })
     }
-    const token= jwt.sign({
-      id:user.id,
-      email:user.email
-    },process.env.JWT_SECRET,{
+  const accesstoken = jwt.sign(
+  {
+    id:user.id,
+    email:user.email
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn:"15m"
+  }
+);
+    const refreshtoken=jwt.sign({
+    id:user.id
+    },process.env.REFRESH_SECRET,{
       expiresIn:"7d"
+    })
+
+    res.cookie("refreshtoken",refreshtoken,{
+      httpOnly:true,
+      secure:false,
+      sameSite:"strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
     return res.status(200).json({
       message:"login successful",
-      token,
+      accesstoken:accesstoken,
       user:{
         id: user.id,
         name: user.name,
